@@ -10,14 +10,16 @@ Sau đây là một vài lý thuyết cơ bản về **ECC - Elliptic Curve In C
 
 # I. Elliptic Curve trong trường số thực
 ## 1. Định nghĩa 
-Tập hợp tất cả các điểm trong không gian $\mathbb{R}^2$ thỏa mãn phương trình có dạng : 
+Tập hợp tất cả các điểm trong không gian $\mathbb{R}^2$ thỏa mãn phương trình có dạng :
+
 $$
 y^2=x^3+Ax + B
 $$
 
 được gọi là phương trình đường cong Elliptic. Phương trình loại này được gọi là phương trình **Weierstrass** dựa theo tên của một nhà toán học, người đã nghiên cứu chúng rộng rãi trong thế kỷ XIX.
 
-Một số ví dụ về Elliptic Curve : 
+Một số ví dụ về Elliptic Curve :
+
 $$
 (E_1):\ y^2 = x^3 - 3x + 3 \quad \text{hoặc} \quad (E_2):\ y^2 = x^3 - 6x + 5
 $$
@@ -25,18 +27,21 @@ $$
 Đồ thị minh họa : 
 
 $(E_1):\ y^2 = x^3 - 3x + 3$
+
 ![{9E1B4EF4-658A-48E5-8F6A-9D677133DC29}](https://hackmd.io/_uploads/rkZKTY1CJe.png)
 
 $(E_2):\ y^2 = x^3 - 6x + 5$
+
 ![{270634BE-B314-43DD-B2EC-50F3D94092AC}](https://hackmd.io/_uploads/ByeyAYJRyl.png)
 
-Ta có thể vẽ được các đồ thị này bằng SageMath như sau : 
-```python=
+Ta có thể vẽ được các đồ thị này bằng SageMath như sau :
+```python
 # (E) : y^2 = x^3 - 3x + 3
 E = EllipticCurve(RR, [-3, 3])  
 plot_E = E.plot(xmin=-10, xmax=10, ymin=-10, ymax=10)
 plot_E.show()
 ```
+
 ![{D026CE2D-F73F-4210-9EA6-EA23BE2AB6D6}](https://hackmd.io/_uploads/Hy76LB7Wxl.png)
 
 
@@ -45,27 +50,32 @@ Một đặc điểm tuyệt vời của Elliptic Curve là có một cách tự
 
 Trước hết ta sẽ có một số định nghĩa như sau : 
 - Elliptic Curve sẽ có một điểm đặc biệt gọi là **điểm "vô cùng"** và được ký hiệu là $\mathcal{O}$.
-- Điểm $\mathcal{O}$ cũng có thể được xem như là thành phần đơn vị với : 
+- Điểm $\mathcal{O}$ cũng có thể được xem như là thành phần đơn vị với :
+
 $$
 \forall P\in E,\hspace{2mm}P+\mathcal{O}=\mathcal{O}+P=P
 $$
+
 - Trong phép toán cộng, phần tử nghịch đảo của điểm $P$ thuộc $E$, kí hiệu là $-P$, là điểm đối xứng của $P$ qua trục hoành **Ox**.
 
 Đó là những điều cơ bản mà ta cần biết, bây giờ đến với phép toán cộng trên Elliptic Curve: 
 - Cho $P,Q$ là hai điểm bất kì trên Elliptic Curve $E$. Vẽ một đường thẳng $L$ đi qua hai điểm $P,Q$. Khi đó đường thẳng $L$ sẽ cắt $E$ tại hai điểm là $P,Q$ và một điểm khác là $R$.
 - Hiển nhiên ta có thể thấy được một điều rằng : Elliptic Curve $E$ là một đồ thị đối xứng với nhau qua trục **Ox**. Vì vậy khi này, ta sẽ lấy đối xứng của điểm $R$ qua trục **Ox** thành điểm $R'$ và tất nhiên điểm $R'$ này cũng thuộc $E$. 
-- Khi đó, điểm $R'$ này chính là kết quả của phép **"cộng"** giữa hai điểm $P$ và $Q$, được kí hiệu là : 
+- Khi đó, điểm $R'$ này chính là kết quả của phép **"cộng"** giữa hai điểm $P$ và $Q$, được kí hiệu là :
+
 $$
 P\oplus Q= R'
 $$
 >Lưu ý rằng : Dấu $\oplus$ này không mang ý nghĩa của phép toán XOR
 
-Ta có thể lấy ví dụ sau : Cho $(E):y^2=x^3-7x+10$ với hai điểm $P(-3,-2)$ và $Q(1,2)$ thuộc $(E)$. Hiển nhiên, ta có thể viết được phương trình đường thẳng $PQ$ là : 
+Ta có thể lấy ví dụ sau : Cho $(E):y^2=x^3-7x+10$ với hai điểm $P(-3,-2)$ và $Q(1,2)$ thuộc $(E)$. Hiển nhiên, ta có thể viết được phương trình đường thẳng $PQ$ là :
+
 $$
 PQ:y=x+1
 $$
 
-Bây giờ ta sẽ cần phải đi tìm ra điểm thứ ba mà $PQ$ cắt $(E)$. Để tìm ra điểm thứ ba, ta sẽ lập một phương trình hoành độ giao điểm của $PQ$ và $(E)$ có dạng như sau : 
+Bây giờ ta sẽ cần phải đi tìm ra điểm thứ ba mà $PQ$ cắt $(E)$. Để tìm ra điểm thứ ba, ta sẽ lập một phương trình hoành độ giao điểm của $PQ$ và $(E)$ có dạng như sau :
+
 $$
 \begin{cases}
 y=x+1\\
@@ -85,18 +95,21 @@ $$
 \Leftrightarrow (x+3)(x-1)(x-3)=0
 $$
 
-Với $x=-3$ thì ta có điểm $P(-3,-2)$ và $x=1$ thì ta có điểm $Q(1,2)$. Điểm thứ ba là điểm $R$ có tọa độ là $(3,4)$. Ta sẽ lấy đối xứng của điểm $R$ này qua trục **Ox** thành điểm $R'$ có tọa độ là $(3,-4)$. Như vậy ta sẽ có : 
+Với $x=-3$ thì ta có điểm $P(-3,-2)$ và $x=1$ thì ta có điểm $Q(1,2)$. Điểm thứ ba là điểm $R$ có tọa độ là $(3,4)$. Ta sẽ lấy đối xứng của điểm $R$ này qua trục **Ox** thành điểm $R'$ có tọa độ là $(3,-4)$. Như vậy ta sẽ có :
+
 $$
 P\oplus Q=R'=(3,-4)
 $$
 
-Hình vẽ minh họa : 
+Hình vẽ minh họa :
+
 ![{5A0F48F5-58D6-4278-8521-A7EB9B61D219}](https://hackmd.io/_uploads/HJwPbW7Wxe.png)
 >$R'$ ở đây được thay bằng $S$
 
 Ngoài ra, nếu như điểm $P$ của ta ngày càng tiền gần về điểm $Q$ thì khi này, theo như những lý thuyết của giải tích, đường thẳng $PQ$ của ta sẽ là tiếp tuyến của Elliptic Curve. 
 
-Hay nói đúng hơn là ta sẽ có : 
+Hay nói đúng hơn là ta sẽ có :
+
 $$
 P\oplus Q= R'
 $$
@@ -109,12 +122,14 @@ $$
 \Rightarrow 2Q=R'
 $$
 
-Với điểm $Q$ là tiếp điểm giữa tiếp tuyến và $(E)$ thì ta có phương trình tiếp tuyến như sau : 
+Với điểm $Q$ là tiếp điểm giữa tiếp tuyến và $(E)$ thì ta có phương trình tiếp tuyến như sau :
+
 $$
 L:y=-x+3
 $$
 
-Từ đây ta sẽ lập một phương trình hoành độ giao điểm của $PQ$ và $(E)$ có dạng như sau : 
+Từ đây ta sẽ lập một phương trình hoành độ giao điểm của $PQ$ và $(E)$ có dạng như sau :
+
 $$
 (-x+3)^2=x^3-7x+10
 $$
@@ -128,12 +143,14 @@ $$
 $$
 
 Với $x=1$ thì ta có điểm $Q(1,2)$, và với $x=-1$ thì ta có điểm $R(-1,4)$. Lấy đối xứng qua trục **Ox** ta có điểm $R'(-1,-4)$
+
 ![{777615D4-A936-44AF-A5CA-5E41C315785A}](https://hackmd.io/_uploads/Bk-aAZmblg.png)
 
 
 Đó là khi ta sử dụng **phương pháp hình học** để mô tả cách tính toán phép cộng trên Elliptic Curve. Còn đối với phương pháp đại số thì ta sẽ có cách tính như sau : 
 - Trường hợp 1 : $P\neq Q$
-    - Cho $P(x_P,y_P)$ và $Q(x_Q,y_Q)$ là hai điểm thuộc Elliptic Curve $(E):y^2=x^3+Ax+B$. Tọa độ của điểm $R$ thỏa mãn phép toán $P\oplus Q=R$ là : 
+    - Cho $P(x_P,y_P)$ và $Q(x_Q,y_Q)$ là hai điểm thuộc Elliptic Curve $(E):y^2=x^3+Ax+B$. Tọa độ của điểm $R$ thỏa mãn phép toán $P\oplus Q=R$ là:
+
 $$
 \begin{cases}
 x_R=\lambda^2-x_P-x_Q\\
@@ -146,7 +163,8 @@ $$
 $$
 
 - Trường hợp 2 : $P=Q$
-    - Cho $P(x_P,y_P)$ là điểm thuộc Elliptic Curve $(E):y^2=x^3+Ax+B$. Tọa độ của điểm $R$ thỏa mãn phép toán $P\oplus P=2P=R$ là :
+    - Cho $P(x_P,y_P)$ là điểm thuộc Elliptic Curve $(E):y^2=x^3+Ax+B$. Tọa độ của điểm $R$ thỏa mãn phép toán $P\oplus P=2P=R$ là:
+
 $$
 \begin{cases}
 x_R=\lambda^2-2x_P\\
@@ -159,10 +177,12 @@ $$
 $$
 
 - Trường hợp 3 : $P=-Q$
-    - Đây là một trường hợp đặc biệt khi $P$ và $Q$ đối xứng với nhau qua trục hoành. Khi đó, đường thẳng $L$ đi qua $P$ và $Q$ sẽ cắt Elliptic Curve tại **điểm "vô cực"** $\mathcal{O}$. Hay : 
+    - Đây là một trường hợp đặc biệt khi $P$ và $Q$ đối xứng với nhau qua trục hoành. Khi đó, đường thẳng $L$ đi qua $P$ và $Q$ sẽ cắt Elliptic Curve tại **điểm "vô cực"** $\mathcal{O}$. Hay:
+
 $$
 P+Q=(-Q)+Q=\mathcal{O}
 $$
+
 ![image](https://hackmd.io/_uploads/HyYjmz7Wgg.png)
 
 Về bản chất đây vẫn là một phép toán cộng nên ta sẽ có các tính chất sau : 
@@ -189,16 +209,18 @@ Về bản chất đây vẫn là một phép toán cộng nên ta sẽ có các
 Elliptic Curve trong trường hữu hạn là một phần quan trọng trong toán học và mật mã học hiện đại. Cụ thể, phép toán trên điểm của đường cong Elliptic có tính chất khó đảo ngược lại, tạo ra một cơ chế bảo mật đủ mạnh để sử dụng trong các giao thức mật mã học như mã hóa khóa công khai, **trao đổi khóa Diffie-Hellman (ECDH)** và tạo **chữ ký số (ECDSA)**,...
 
 ## 1. Định nghĩa 
-Trong trường hữu hạn $\mathbb{F}_p$, với $p\geq3$ là một số nguyên tố bất kì, tập hợp các điểm thỏa mãn phương trình : 
+Trong trường hữu hạn $\mathbb{F}_p$, với $p\geq3$ là một số nguyên tố bất kì, tập hợp các điểm thỏa mãn phương trình :
+
 $$
 y^2\equiv x^3+Ax+B\pmod{p}
 $$
 
 là phương trình đường cong Elliptic trong trường hữu hạn $\mathbb{F}_p$, với điều kiện là : $4A^3+ 27B^2 \not\equiv 0\pmod{p}$. Điều kiện này đảm bảo rằng đường cong không có các điểm kỳ dị, điểm mà tiếp tuyến không xác định. (Mình sẽ giải thích tại sao lại có điều kiện đó, ~~nếu mình có thời gian~~ :smile:)
 
-Ngoài ra, ta cũng có trường hợp đặc biệt cho vấn đề này, chính là Elliptic Curve trên trường hữu hạn $\mathbb{F}_2$ và $\mathbb{F}_{2^k}$. Tuy nhiên vì nó hơi phức tạp nên mình sẽ nói về nó sau.
+Ngoài ra, ta cũng có trường hợp đặc biệt cho vấn đề này, chính là Elliptic Curve trên trường hữu hạn $\mathbb{F}\_2$ và $\mathbb{F}_{2^k}$. Tuy nhiên vì nó hơi phức tạp nên mình sẽ nói về nó sau.
 
-Một số ví dụ về Elliptic Curve trong một số trường hữu hạn $\mathbb{F}_p$: 
+Một số ví dụ về Elliptic Curve trong một số trường hữu hạn $\mathbb{F}_p$:
+
 $$
 \begin{cases}
 (E_1):y^2\equiv x^3-3x+3\pmod{11}\\
@@ -207,14 +229,16 @@ $$
 $$
 
 Ảnh minh họa : 
-- $y^2\equiv x^3-3x+3\pmod{11}$ : 
+- $y^2\equiv x^3-3x+3\pmod{11}$ :
+
 ![{EC662C9F-B5C3-486A-BE44-1D92F4E80A67}](https://hackmd.io/_uploads/rJoqBX7Zxl.png)
 
-- $y^2\equiv x^3-6x+5\pmod{17}$ : 
+- $y^2\equiv x^3-6x+5\pmod{17}$ :
+
 ![{E2C7813B-6AFB-48CF-A3AA-E068CD765F6A}](https://hackmd.io/_uploads/rJV8L7mZle.png)
 
 Cách vẽ trong SageMath : 
-```python=
+```python
 # (E) : y^2 = x^3 + Ax + B (mod p)
 E = EllipticCurve(GF(p), [A, B]) #thay p, A, B vào đây
 
@@ -231,7 +255,7 @@ Về cơ bản, phép toán cộng hai điểm trên Elliptic Curve trong trư�
 Ta sẽ lấy một ví dụ để thực hiện. Cho $(E):y^2\equiv x^3-7x+10\pmod{19}$
 
 - Ta có thể in các điểm thuộc $(E)$ bằng SageMath như sau : 
-```python=
+```python
 # in ra các điểm thuộc (E)
 E = EllipticCurve(GF(19), [-7, 10])
 for P in E:
@@ -263,7 +287,7 @@ for P in E:
 ```
 
 - Thực hiện phép toán cộng trên Elliptic Curve : 
-```python=
+```python
 E = EllipticCurve(GF(19),[-7,10]) 
 
 #chọn điểm P(1,17) và Q(5,10) thuộc (E)
@@ -276,7 +300,7 @@ print(R)
 # (3 : 15 : 1)
 ```
 
-```python=
+```python
 E = EllipticCurve(GF(19),[-7,10]) 
 
 #chọn điểm P(1,17) thuộc (E)
@@ -289,7 +313,7 @@ print(Q)
 ```
 
 - Để kiểm tra một điểm có thuộc đường cong hay không thì ta sử dụng hàm `.is_on_curve(x,y)` như sau : 
-```python=
+```python
 E = EllipticCurve(GF(19),[-7,10]) 
 
 #chọn điểm P(1,17) và Q(11,7)
@@ -307,7 +331,7 @@ Như đã nói, **không hề tồn tại** phép nhân hai điểm bất kì n�
 Về bản chất, phép nhân ở đây vẫn là phép cộng, nhưng thực hiện nhiều lần mà thôi.
 
 Ta có thể tính toán trong SageMath như sau : 
-```python=
+```python
 E = EllipticCurve(GF(19),[-7,10]) 
 
 #chọn điểm P(1,17) 
@@ -347,34 +371,37 @@ Ngay sau đó, các điểm $9P$, $10P$,... cũng có tọa độ giống với 
 
 ## 4. Order của Elliptic Curve 
 Chúng ta sẽ có hai định nghĩa cho phần này : 
-- **Order của một điểm trên Elliptic Curve** : Order của một điểm $P$ thuộc Elliptic Curve là một số nguyên $n$ nhỏ nhất sao cho : 
+- **Order của một điểm trên Elliptic Curve** : Order của một điểm $P$ thuộc Elliptic Curve là một số nguyên $n$ nhỏ nhất sao cho :
+
 $$
 nP=\mathcal{O}
 $$
-- **Order của Elliptic Curve** : Order của một Elliptic Curve trong trường hữu hạn $\mathbb{F}_p$ là **tổng số lượng các điểm thuộc đường cong** ấy, bao gồm cả điểm vô cực $\mathcal{O}$, được kí hiệu là $\#E(\mathbb{F}_p)$
+- **Order của Elliptic Curve** : Order của một Elliptic Curve trong trường hữu hạn $\mathbb{F}_p$ là **tổng số lượng các điểm thuộc đường cong** ấy, bao gồm cả điểm vô cực $\mathcal{O}$, được kí hiệu là $\\#E(\mathbb{F}_p)$
  
 Số lượng các điểm trên Elliptic Curve trong trường hữu hạn $\mathbb{F}_p$ không phải lúc nào cũng bằng $p$ (tức là số phần tử của trường $\mathbb{F}_p$). Chính vì điều đó, ta có định lý Hasse cho vấn đề này : 
-- **Định lý Hasse** : Cho $E$ là một Elliptic Curve thuộc trường hữu hạn $\mathbb{F}_p$. Gọi $\#E(\mathbb{F}_p)$ là số lượng các điểm thuộc $E$, khi đó ta có : 
-$$
-p+1-2\sqrt{p}\leq \#E(\mathbb{F}_p)\leq p+1+2\sqrt{p}
-$$
-
-Ta sẽ lấy một ví dụ để thực hiện. Cho $(E):y^2\equiv x^3-7x+10\pmod{11}$. Dựa theo định lý Hasse, số điểm thuộc $(E)$ vào khoảng : 
-$$
-p+1-2\sqrt{p}\leq \#E(\mathbb{F}_p)\leq p+1+2\sqrt{p}
-$$
+- **Định lý Hasse** : Cho $E$ là một Elliptic Curve thuộc trường hữu hạn $\mathbb{F}_p$. Gọi $\\#E(\mathbb{F}_p)$ là số lượng các điểm thuộc $E$, khi đó ta có :
 
 $$
-\Leftrightarrow 11+1-2\sqrt{11}\leq \#E(\mathbb{F}_p)\leq 11+1+2\sqrt{11}
+p+1-2\sqrt{p}\leq \\#E(\mathbb{F}_p)\leq p+1+2\sqrt{p}
+$$
+
+Ta sẽ lấy một ví dụ để thực hiện. Cho $(E):y^2\equiv x^3-7x+10\pmod{11}$. Dựa theo định lý Hasse, số điểm thuộc $(E)$ vào khoảng :
+
+$$
+p+1-2\sqrt{p}\leq \\#E(\mathbb{F}_p)\leq p+1+2\sqrt{p}
 $$
 
 $$
-\Leftrightarrow 5.3\leq \#E(F_p)\leq 18.6
+\Leftrightarrow 11+1-2\sqrt{11}\leq \\#E(\mathbb{F}_p)\leq 11+1+2\sqrt{11}
+$$
+
+$$
+\Leftrightarrow 5.3\leq \\#E(F_p)\leq 18.6
 $$
 
 
 Ta có danh sách các điểm thuộc $(E)$ như sau : 
-```python=
+```python
 # in ra các điểm thuộc (E)
 E = EllipticCurve(GF(11), [-7, 10])
 for P in E:
@@ -396,10 +423,10 @@ for P in E:
 (10 : 7 : 1)
 ```
 
-Như ta thấy, có $15$ điểm thuộc $(E)$, bao gồm cả điểm vô cực $\mathcal{O}$. Vì vậy, ta nói bậc của Elliptic Curve lúc này là $15$, hay $\#E(\mathbb{F}_p)=15$.
+Như ta thấy, có $15$ điểm thuộc $(E)$, bao gồm cả điểm vô cực $\mathcal{O}$. Vì vậy, ta nói bậc của Elliptic Curve lúc này là $15$, hay $\\#E(\mathbb{F}_p)=15$.
 
 Ngoài ra, khi ta chọn điểm $P(1,2)$ làm mốc, ta sẽ có : 
-```python=
+```python
 E = EllipticCurve(GF(11), [-7, 10])
 P = E(1,2)
 for i in range(20):
@@ -428,13 +455,14 @@ for i in range(20):
 19 * P = (5 : 1 : 1)
 ```
 
-Dựa vào bảng này, có thể thấy $n=15$ chính là order của điểm $P(1,2)$ vì nó là số nguyên nhỏ nhất thỏa mãn : 
+Dựa vào bảng này, có thể thấy $n=15$ chính là order của điểm $P(1,2)$ vì nó là số nguyên nhỏ nhất thỏa mãn :
+
 $$
 nP=\mathcal{O}
 $$
 
 Mỗi một điểm thuộc $(E)$ đều sẽ có một order khác nhau. Bạn có thể tự thử bằng cách dùng SageMath để kiểm tra.
-```python=
+```python
 E = EllipticCurve(GF(11), [-7, 10])
 
 # Kiểm tra order của E
@@ -462,7 +490,7 @@ Order của điểm (10 : 7 : 1) là : 15
 ```
 
 Nếu như bạn để ý kĩ : Order của một điểm $P$ bất kì trong $(E)$ đều là một **ước số** của Order của Elliptic Curve (theo định lý Lagrange trong lý thuyết nhóm).
-```python=
+```python
 E = EllipticCurve(GF(17), [-7, 10])
 for P in E:
     print(f"Order của {P} là một ước số của E? -", E.order() % P.order() == 0)
@@ -473,7 +501,8 @@ for P in E:
 ## 1. ECDLP
 DLP (Discrete Logarithm Problem) trên ECC (Elliptic Curve Cryptography) là một vấn đề toán học cốt lõi tạo nên tính an toàn của các hệ mật mã dựa trên đường cong elliptic. Cụ thể ta có bài toán như sau : 
 
-- Cho $E$ là Elliptic Curve được định nghĩa trên trường hữu hạn $\mathbb{F}_p$. Gọi $G$ là một điểm khởi đầu và $Q$ là một điểm bất kì khác $G$ thuộc $E$. Tìm $k$ là một số nguyên thỏa mãn : 
+- Cho $E$ là Elliptic Curve được định nghĩa trên trường hữu hạn $\mathbb{F}_p$. Gọi $G$ là một điểm khởi đầu và $Q$ là một điểm bất kì khác $G$ thuộc $E$. Tìm $k$ là một số nguyên thỏa mãn :
+
 $$
 Q=kG
 $$
@@ -501,7 +530,8 @@ Về cơ bản ta có thuật toán như sau :
 - **Bước 1** : Hai bên Alice và Bob sẽ chọn chung một Elliptic Curve với một điểm sinh $G$.
 - **Bước 2** : Đầu tiên, Alice sẽ tạo cho mình một số nguyên $d_A$ bí mật ngẫu nhiên và tính điểm $Q_A=d_A.G$. Tương tự, Bob cũng sẽ tạo cho mình một số nguyên $d_B$ bí mật ngẫu nhiên và tính điểm $Q_B=d_B.G$.
 - **Bước 3** : Cả hai sẽ trao đổi giá trị $Q_A$ và $Q_B$ của mình cho đối phương, Alice nhận $Q_B$ và Bob nhận $Q_A$.
-- **Bước 4** : Sau khi nhận được giá trị công khai của đối phương, mỗi bên sẽ tính giá trị bí mật chung $s$ như sau : 
+- **Bước 4** : Sau khi nhận được giá trị công khai của đối phương, mỗi bên sẽ tính giá trị bí mật chung $s$ như sau :
+
 $$
 \begin{cases}
 s_A=d_A.Q_B=d_A.d_B.G\\
@@ -523,7 +553,7 @@ Ví dụ minh họa : Cho $(E):y^2\equiv x^3-7x+10\pmod{19}$. Gọi $G(3,15)$ l�
     - Bob sẽ tính khóa bí mật chung là : $d_B.Q_A=11.(2,2)=(17,15)$
 
 Như vậy, cả hai đã trao đổi thành công khóa bí mật chung.  Khoá này sẽ có thể được dùng làm khóa chung cho mã hóa AES bằng cách lấy tọa độ $x_S=17$, dùng hàm băm như SHA-512 để băm số đó ra thành : 
-```python=
+```python
 from hashlib import sha512
 xS = "17".encode()
 key = sha512(xS).hexdigest()[:32]
@@ -532,7 +562,7 @@ print(key)
 ```
 
 Tóm tắt lại toàn bộ quá trình như sau : 
-```python=
+```python
 # dùng chung Elliptic Curve E, điểm sinh G
 E = EllipticCurve(GF(19), [-7,10])
 G = E(3,15)
@@ -566,25 +596,29 @@ Chữ kí của ECDSA sẽ có dạng là một cặp số nguyên $(r,s)$. Đ�
 - Đầu tiên, hai bên Alice và Bob phải thỏa thuận với nhau về việc sử dụng chung một Elliptic Curve trên trường hữu hạn $\mathbb{F}_p$ và một điểm sinh $G$ có **order** $n$ bất kì thuộc đường cong đó.
 - Alice sẽ có cho mình một khóa bí mật $d_A\in[1,n-1]$ và một khóa công khai là $Q_A=d_A\times G$.
 - Alice sẽ chọn cho mình một số nguyên **ngẫu nhiên tuyệt đối** $k\in[1,n-1]$ khác với khóa bí mật của mình. Số nguyên $k$ này phải được giữ bí mật tuyệt đối, chỉ có Alice được biết.
-- Tiếp theo, Alice sẽ tính tọa độ điểm $P$ với công thức : 
+- Tiếp theo, Alice sẽ tính tọa độ điểm $P$ với công thức :
+ 
 $$
 P(x_P,y_P)=k.G
 $$
 
 - Khi này, giá trị $r$ của ta chính là $x_P$. 
-- Alice sẽ đi tính $z=hash(M)$, với hash là một hàm băm nào đó đủ mạnh như : SHA-256, SHA-512... Và công thức tính $s$ sẽ là : 
+- Alice sẽ đi tính $z=hash(M)$, với hash là một hàm băm nào đó đủ mạnh như : SHA-256, SHA-512... Và công thức tính $s$ sẽ là :
+ 
 $$
 s\equiv k^{-1}(z+r.d_A)\pmod{n}
 $$
 
 - Nếu như $s=0$ thì cần phải chọn lại $k$.
-- Sau khi đã có được cặp chữ kí $(r,s)$, Alice sẽ gửi cặp này cho Bob cùng với $M$ đã được mã hóa của mình để Bob có thể xác minh. Bob sẽ giải mã $M$ bằng khóa chung của cả hai, có thể là đã dùng ECDH để trao đổi. Sau khi có được Plaintext $M$, Bob sẽ tính $z=hash(M)$. Theo đó, để xác minh $M$ có phải là chuẩn không, Bob sẽ tính : 
+- Sau khi đã có được cặp chữ kí $(r,s)$, Alice sẽ gửi cặp này cho Bob cùng với $M$ đã được mã hóa của mình để Bob có thể xác minh. Bob sẽ giải mã $M$ bằng khóa chung của cả hai, có thể là đã dùng ECDH để trao đổi. Sau khi có được Plaintext $M$, Bob sẽ tính $z=hash(M)$. Theo đó, để xác minh $M$ có phải là chuẩn không, Bob sẽ tính :
+
 $$
 P(x_P,y_P)\equiv s^{-1}.(z.G+r.Q_A)\pmod{n}
 $$
 
 - Khi đó, nếu tọa độ $x_P$ tính được từ công thức trên bằng với $r$ thì chứng tỏ rằng chữ ký là hợp lệ và PLaintext $M$ gửi qua là chính xác.
-- Ta hoàn toàn có thể chứng minh công thức đó như sau : 
+- Ta hoàn toàn có thể chứng minh công thức đó như sau :
+
 $$
 P(x_P,y_P)\equiv s^{-1}.(z.G+r.Q_A)\pmod{n}
 $$
@@ -607,7 +641,8 @@ $$
 
 Nếu chữ ký $(r,s)$ hoặc Plaintext $m$ bị thay đổi trong quá trình truyền, giá trị $P$ tính toán trong quá trình xác minh cũng sẽ thay đổi. Điều này làm cho chữ ký không hợp lệ, giúp Bob phát hiện được sự thay đổi hoặc giả mạo thông tin. Đây chính là cơ chế bảo vệ tính toàn vẹn và xác thực của ECDSA.
 
-Minh hoạ ở hình vẽ này : 
+Minh hoạ ở hình vẽ này :
+
 ![image](https://hackmd.io/_uploads/rkbhcAU-ge.png)
 
 
@@ -616,7 +651,8 @@ Tuy bài toán ECDLP rất là khó phá, nhưng vẫn sẽ có một số trư�
 
 Bây giờ ta sẽ ví dụ một số cách tấn công tiêu biểu dưới đây : 
 ## 1. MOV Attack
-Ví dụ, cho một Elliptic Curve có Modulo $p$ và điểm sinh $G$ có order là $n$. Ta sẽ định nghĩa **Embedding Degree** của Elliptic Curve là một số nguyên $k$ nhỏ nhất thỏa mãn phương trình: 
+Ví dụ, cho một Elliptic Curve có Modulo $p$ và điểm sinh $G$ có order là $n$. Ta sẽ định nghĩa **Embedding Degree** của Elliptic Curve là một số nguyên $k$ nhỏ nhất thỏa mãn phương trình:
+
 $$
 p^k\equiv 1\pmod{n}
 $$
@@ -631,18 +667,20 @@ Về cơ bản thì nó cũng khá là phức tạp nên mình sẽ để một 
 
 
 ## 2. Smart Attack
-Như ta đã biết, số lượng các điểm trên Elliptic Curve trong trường hữu hạn $\mathbb{F}_p$ chưa chắc đã bằng với Modulo $p$. Tuy nhiên, vẫn tồn tại một vài đường cong mà số lượng điểm trên đường cong đó bằng với chính Modulo $p$, hay nó sẽ là : 
+Như ta đã biết, số lượng các điểm trên Elliptic Curve trong trường hữu hạn $\mathbb{F}_p$ chưa chắc đã bằng với Modulo $p$. Tuy nhiên, vẫn tồn tại một vài đường cong mà số lượng điểm trên đường cong đó bằng với chính Modulo $p$, hay nó sẽ là :
+
 $$
-\#E(\mathbb{F}_p)=p
+\\#E(\mathbb{F}_p)=p
 $$
 
 Khi đó đường cong của ta được gọi là **đường cong bất quy tắc (Anomalous curve)** và nó hoàn toàn có thể bị tấn công bởi **Smart attack**.
 
-Khi giải quyết các dạng bài ECC thì ta cũng nên thử kiểm tra xem đường cong đó có $\#E(\mathbb{F}_p)=p$ hay không. Nếu như có thì hãy dùng chiếc **[tool](https://github.com/jvdsn/crypto-attacks/blob/master/attacks/ecc/smart_attack.py)** này để giải :smile:
+Khi giải quyết các dạng bài ECC thì ta cũng nên thử kiểm tra xem đường cong đó có $\\#E(\mathbb{F}_p)=p$ hay không. Nếu như có thì hãy dùng chiếc **[tool](https://github.com/jvdsn/crypto-attacks/blob/master/attacks/ecc/smart_attack.py)** này để giải :smile:
 
 
 ## 3. Bias Nonce 
-Trong ECDSA, ta sẽ có cặp chữ kí là : 
+Trong ECDSA, ta sẽ có cặp chữ kí là :
+
 $$
 \begin{cases}
 r=x_P\text{ với }P=k.G\\
@@ -661,17 +699,20 @@ Vấn đề cốt lõi ở đây là giá trị $k$ của ta bé hơn rất nhi�
 
 $k$ của ta khi này sẽ được gọi là **biased nonce (nonce bị lệch)**, và nếu như nhiều tin nhắn được ký bởi cùng một khóa bí mật $d$ thì ta sẽ hoàn toàn có thể khôi phục lại được luôn cả khóa bí mật $d$. Vì sao???
 
-Giả sử $l$ bits đầu của $k_i$ toàn là bit $0$. Ta sẽ có một điều kiện là : 
+Giả sử $l$ bits đầu của $k_i$ toàn là bit $0$. Ta sẽ có một điều kiện là :
+
 $$
 |k_i| < 2^{\log_2n-l}
 $$
 
-Với mỗi $k_i$ như vậy, nếu các Plaintext $M$ khác nhau đều kí bởi cùng một khóa bí mật $d$ giống nhau thì khi đó ta có : 
+Với mỗi $k_i$ như vậy, nếu các Plaintext $M$ khác nhau đều kí bởi cùng một khóa bí mật $d$ giống nhau thì khi đó ta có :
+
 $$
 s_i\equiv k_i^{-1}(z_i+r_i.d_A)\pmod{n}
 $$
 
-Biến đổi một chút ta sẽ có : 
+Biến đổi một chút ta sẽ có :
+
 $$
 s_i.k_i\equiv (z_i+r_i.d_A)\pmod{n}
 $$
@@ -688,22 +729,26 @@ $$
 \Leftrightarrow k_i-(s_i^{-1}.r_i).d_A+(-s_i^{-1}.z_i)\equiv 0\pmod{n}
 $$
 
-Đây chính là bài toán **HNP** có dạng là : 
+Đây chính là bài toán **HNP** có dạng là :
+
 $$
 \beta_i-t_i\alpha+a_i\equiv 0\pmod{n}
 $$
 
-Với $i\in [1,m]$, đặt : 
+Với $i\in [1,m]$, đặt :
+
 $$
-\begin{cases}
-B=2^{???} \text{ thỏa mãn } |k_i|<B<n\\
-t_i=s_i^{-1}.r_i\\
-a_i=-s_i^{-1}.z_i
-\end{cases}
+\begin{aligned}
+B &= 2^{\text{???}} 
+    && \text{thỏa mãn } |k_i| < B \\
+t_i &= s_i^{-1} \cdot r_i \\
+a_i &= -s_i^{-1} \cdot z_i
+\end{aligned}
 $$
 >Thông thường ta phải điều chỉnh $B$ khá nhiều để có thể cho ra được đáp án cuối cùng.
 
-Ta thiết lập một Lattice có dạng như sau : 
+Ta thiết lập một Lattice có dạng như sau :
+
 $$
 \mathcal{L}=
 \begin{bmatrix}
@@ -711,18 +756,20 @@ n	&	&	&	&	&	\\
 &n	&	&	&	&	\\
 &	&\ddots	&	&	&	\\
 &	&	&n	&	&	\\
-t_1	&t_2	&\cdots	&t_m	& B/n	\\a_1	&a_2	&\cdots	&a_m	&		& B 
+t_1	&t_2	&\cdots	&t_m	& B/n	\\
+a_1	&a_2	&\cdots	&a_m	&		& B 
 \end{bmatrix}
 $$
 
-Áp dụng LLL cho Lattice này ta sẽ thu được một vector có dạng như sau : 
+Áp dụng LLL cho Lattice này ta sẽ thu được một vector có dạng như sau :
+
 $$
 u=(β_1,β_2,...,β_m,\frac{d_A.B}{n}, −B)
 $$
 
 Khi này chỉ cần tính : $u[-2].\frac{n}{B}$ là ta đã thu lại $d_A$ rồi!!!
 
-Đó chính là cách tấn công ECDSA khi mà Nonce không được chọn đúng, tức là Bias Nonce. Các bạn có thể xem thêm **[ở đây](https://eprint.iacr.org/2023/032.pdf)** (nó nằm mục $5.3.2$).
+Đó chính là cách tấn công ECDSA khi mà Nonce không được chọn đúng, tức là Bias Nonce. Các bạn có thể xem thêm **[ở đây](https://eprint.iacr.org/2023/032.pdf)** (mục $5.3.2$).
 
 
 
